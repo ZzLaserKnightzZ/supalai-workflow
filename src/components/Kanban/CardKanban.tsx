@@ -46,7 +46,7 @@ export const CardKanBan: React.FC<ICardKanban> = (prop) => {
           </CardTaskIcon>
         </CardTaskHeader>
         <Falcuty>{prop?.faculty}</Falcuty>
-        <CardTaskBody $haveImg={prop?.img ? 1 : 0}>
+        <CardTaskBody $haveImg={prop?.img ? true:false}>
           <CardTaskDescription>{prop?.description}</CardTaskDescription>
           {prop?.img && <CardTaskDescriptionImg src={prop?.img[0]} />}
         </CardTaskBody>

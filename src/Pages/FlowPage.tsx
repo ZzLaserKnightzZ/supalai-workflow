@@ -18,16 +18,12 @@ import "reactflow/dist/style.css";
 import CustomNode from "../components/Flow/CustomNode";
 import CustomEdge from "../components/Flow/CustomEdge";
 
-
 //test
 import projectData from "../Data/project.json";
 import test from "../Data/test.json";
 import { Project, ProjectTask } from "../model/ProjectTask";
 import { ConverToNodeFlow, ConvertToEdge } from "../functionConverter/Convert";
 
-
-
- 
 /*
 const initialNodes: Node[] = [
   {
@@ -57,8 +53,6 @@ const initialNodes: Node[] = [
 ];
 */
 
-
-
 const DrawProject = (
   tasks: ProjectTask[],
   addTask: (nodes: Node) => void,
@@ -66,7 +60,6 @@ const DrawProject = (
   startY = 0,
   stack = 0
 ) => {
-
   const stepX = 300;
   const stepY = 300;
 
@@ -115,7 +108,7 @@ const SortNodes2 = (
         .filter((node) => node.position.x === xMax)
         .forEach((node, index) => {
           if (node.position.y > 0) {
-            y += stepY ;
+            y += stepY;
             saveNode({
               ...node,
               position: { x: node.position.x, y: y },
@@ -126,13 +119,13 @@ const SortNodes2 = (
       SortNodes2(nodes, saveNode, xMax - stepX, y, ++step);
     });
   } else {
-
     const nodesColumn = nodes.filter((node) => node.position.x === startX);
     const lastNodes = nodes.filter(
       (node) => node.position.x === startX + stepX
     );
 
-    let maxY = 0,y =startY;
+    let maxY = 0,
+      y = startY;
     lastNodes.forEach((node) => {
       if (node.position.y > maxY) {
         maxY = node.position.y;
@@ -142,7 +135,7 @@ const SortNodes2 = (
     y = maxY;
     nodesColumn.forEach((node, index) => {
       if (node.position.y > 0) {
-        y +=  stepY ;
+        y += stepY;
         saveNode({
           ...node,
           position: { x: node.position.x, y: y },
@@ -150,15 +143,14 @@ const SortNodes2 = (
       }
     });
 
-    if(startX > stepX){
-    SortNodes2(nodes, saveNode, startX - stepX, y, ++step);
+    if (startX > stepX) {
+      SortNodes2(nodes, saveNode, startX - stepX, y, ++step);
     }
   }
 };
 //------------------------------node---------------------------------
 const project = JSON.parse(JSON.stringify(test)) as Project; //const project = JSON.parse(JSON.stringify(projectData)) as Project;
 let nodeArr: Node[] = [];
-
 
 //////////////////////////////test////////////////////////////////////
 //const projectTest = JSON.parse(JSON.stringify(projectTest)) as Project;
@@ -167,10 +159,10 @@ if (project.task)
   DrawProject(project.task, (node) => {
     nodeArr = [...nodeArr, node];
   });
-for(let sortTime=0;sortTime < 30;sortTime++){
-SortNodes2(nodeArr, (node) => {
-  nodeArr = nodeArr.map((n) => (n.id === node.id ? node : n));
-});
+for (let sortTime = 0; sortTime < 30; sortTime++) {
+  SortNodes2(nodeArr, (node) => {
+    nodeArr = nodeArr.map((n) => (n.id === node.id ? node : n));
+  });
 }
 const initialNodes: Node[] = nodeArr;
 //////////////////////////////test////////////////////////////////////
@@ -258,13 +250,13 @@ const edgeTypes: EdgeTypes = {
   custom: CustomEdge,
   //'start-end': CustomEdgeStartEnd,
 };
-interface IFlowPageProps {}
+interface IFlowPageProps {
+  tasks?: ProjectTask[];
+}
 
 export const FlowPage: React.FC<IFlowPageProps> = (props) => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
-
 
   /**
      *   const onNodesChange: OnNodesChange = useCallback(
@@ -283,26 +275,21 @@ export const FlowPage: React.FC<IFlowPageProps> = (props) => {
     [setEdges]
   );*/
 
-
-
   return (
     <>
-      <div style={{ width: "calc(100vw - 2rem)", height: "calc(100vh - 3rem)" }}>
-
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            edgeTypes={edgeTypes}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            //onConnect={onConnect}
-            nodeTypes={nodeTypes}
-          >
-            <Controls />
-            {/*<MiniMap />*/}
-            <Background gap={12} size={1}  style={{ backgroundColor: "gray" }} />
-          </ReactFlow>
-      </div>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        edgeTypes={edgeTypes}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        //onConnect={onConnect}
+        nodeTypes={nodeTypes}
+      >
+        <Controls />
+        {/*<MiniMap />*/}
+        <Background gap={12} size={1} style={{ backgroundColor: "gray" }} />
+      </ReactFlow>
     </>
   );
 };

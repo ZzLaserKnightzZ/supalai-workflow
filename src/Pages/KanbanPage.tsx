@@ -13,10 +13,10 @@ import {
 import { CardKanBan, ICardKanban } from "../components/Kanban/CardKanban";
 import jsonTest from "../Data/test.json";
 import { Project, ProjectTask } from "../model/ProjectTask";
-import { useContext } from "react";
 
-
-interface IKanbanPageProps {}
+interface IKanbanPageProps {
+  tasks?: ProjectTask[];
+}
 
 const ConvertJsonToKanban = (
   tasks: ProjectTask[],
@@ -25,10 +25,10 @@ const ConvertJsonToKanban = (
   addCards(
     tasks.map((task, index) => {
       return {
-        id: task.id+"",
-        name: task.name+task.id,
+        id: task.id + "",
+        name: task.name + task.id,
         description: task.description,
-        date: task?.date ,
+        date: task?.date,
         faculty: task.faculty,
         img: task.img,
         status: task.status,
@@ -51,7 +51,6 @@ ConvertJsonToKanban(testProject.task, (newCards) => {
 });
 
 export const KanbanPage: React.FC<IKanbanPageProps> = (props) => {
-
   const [cards, setCards] = React.useState<ICardKanban[]>(card_list);
   const [showPending, setShowPending] = React.useState<boolean>(false);
   const [showShedule, setShowShedule] = React.useState<boolean>(false);
@@ -61,36 +60,63 @@ export const KanbanPage: React.FC<IKanbanPageProps> = (props) => {
     <>
       <KanbanContainer>
         <KanbanColumn $status="pending">
-          Pending <KanbanCounter>{cards.filter(card => card.status === "pending").length}</KanbanCounter>
+          Pending{" "}
+          <KanbanCounter>
+            {cards.filter((card) => card.status === "pending").length}
+          </KanbanCounter>
         </KanbanColumn>
         <KanbanColumn $status="on Schedule">
-          On Schedule <KanbanCounter>{cards.filter(card => card.status === "on shedule").length}</KanbanCounter>
+          On Schedule{" "}
+          <KanbanCounter>
+            {cards.filter((card) => card.status === "on shedule").length}
+          </KanbanCounter>
         </KanbanColumn>
         <KanbanColumn $status="stuck">
-          Stuck <KanbanCounter>{cards.filter(card => card.status === "stuck").length}</KanbanCounter>
+          Stuck{" "}
+          <KanbanCounter>
+            {cards.filter((card) => card.status === "stuck").length}
+          </KanbanCounter>
         </KanbanColumn>
         <KanbanColumn $status="completed">
-          Completed <KanbanCounter>{cards.filter(card => card.status === "completed").length}</KanbanCounter>
+          Completed{" "}
+          <KanbanCounter>
+            {cards.filter((card) => card.status === "completed").length}
+          </KanbanCounter>
         </KanbanColumn>
       </KanbanContainer>
 
       <StatusContainer>
         <TaskContainer>
-          {cards.filter(card => card.status === "pending").map((card, index) => <CardKanBan key={index} {...card}/>)}
+          {cards
+            .filter((card) => card.status === "pending")
+            .map((card, index) => (
+              <CardKanBan key={index} {...card} />
+            ))}
         </TaskContainer>
 
         <TaskContainer>
-        {cards.filter(card => card.status === "on shedule").map((card, index) => <CardKanBan key={index} {...card} />)}
+          {cards
+            .filter((card) => card.status === "on shedule")
+            .map((card, index) => (
+              <CardKanBan key={index} {...card} />
+            ))}
         </TaskContainer>
 
         <TaskContainer>
-        {cards.filter(card => card.status === "stuck").map((card, index) => <CardKanBan key={index} {...card} />)}
+          {cards
+            .filter((card) => card.status === "stuck")
+            .map((card, index) => (
+              <CardKanBan key={index} {...card} />
+            ))}
         </TaskContainer>
 
         <TaskContainer>
-        {cards.filter(card => card.status === "completed").map((card, index) => <CardKanBan key={index} {...card} />)}
+          {cards
+            .filter((card) => card.status === "completed")
+            .map((card, index) => (
+              <CardKanBan key={index} {...card} />
+            ))}
         </TaskContainer>
-
       </StatusContainer>
       {/*mobile */}
       <MobileKanbanContainer>
@@ -99,13 +125,19 @@ export const KanbanPage: React.FC<IKanbanPageProps> = (props) => {
             $status="pending"
             onClick={() => setShowPending((x) => !x)}
           >
-            Pending<KanbanCounter style={{ width: "4rem" }}> {cards.filter(card => card.status === "pending").length}</KanbanCounter>
+            Pending
+            <KanbanCounter style={{ width: "4rem" }}>
+              {" "}
+              {cards.filter((card) => card.status === "pending").length}
+            </KanbanCounter>
           </MobileKanbanHeader>
-          
-          <MobileKanbanContent
-             $isShowing={showPending ? 1 : 0}
-          >
-             {cards.filter(card => card.status === "pending").map((card, index) => <CardKanBan key={index} {...card} />)}
+
+          <MobileKanbanContent $isShowing={showPending}>
+            {cards
+              .filter((card) => card.status === "pending")
+              .map((card, index) => (
+                <CardKanBan key={index} {...card} />
+              ))}
           </MobileKanbanContent>
         </MobileKanbanStatusContainer>
 
@@ -115,12 +147,16 @@ export const KanbanPage: React.FC<IKanbanPageProps> = (props) => {
             onClick={() => setShowShedule((x) => !x)}
           >
             On Schedule
-            <KanbanCounter style={{ width: "4rem" }}>{cards.filter(card => card.status === "on shedule").length}</KanbanCounter>
+            <KanbanCounter style={{ width: "4rem" }}>
+              {cards.filter((card) => card.status === "on shedule").length}
+            </KanbanCounter>
           </MobileKanbanHeader>
-          <MobileKanbanContent
-             $isShowing={showShedule ? 1 : 0}
-          >
-              {cards.filter(card => card.status === "on shedule").map((card, index) => <CardKanBan key={index} {...card} />)}
+          <MobileKanbanContent $isShowing={showShedule}>
+            {cards
+              .filter((card) => card.status === "on shedule")
+              .map((card, index) => (
+                <CardKanBan key={index} {...card} />
+              ))}
           </MobileKanbanContent>
         </MobileKanbanStatusContainer>
 
@@ -129,12 +165,18 @@ export const KanbanPage: React.FC<IKanbanPageProps> = (props) => {
             $status="stuck"
             onClick={() => setShowStuck((x) => !x)}
           >
-            Stuck<KanbanCounter style={{ width: "4rem" }}> {cards.filter(card => card.status === "stuck").length}</KanbanCounter>
+            Stuck
+            <KanbanCounter style={{ width: "4rem" }}>
+              {" "}
+              {cards.filter((card) => card.status === "stuck").length}
+            </KanbanCounter>
           </MobileKanbanHeader>
-          <MobileKanbanContent
-             $isShowing={showStuck ? 1 : 0}
-          >
-             {cards.filter(card => card.status === "stuck").map((card, index) => <CardKanBan key={index} {...card} />)}
+          <MobileKanbanContent $isShowing={showStuck}>
+            {cards
+              .filter((card) => card.status === "stuck")
+              .map((card, index) => (
+                <CardKanBan key={index} {...card} />
+              ))}
           </MobileKanbanContent>
         </MobileKanbanStatusContainer>
 
@@ -143,12 +185,17 @@ export const KanbanPage: React.FC<IKanbanPageProps> = (props) => {
             $status="completed"
             onClick={() => setShowComplete((x) => !x)}
           >
-            Completed<KanbanCounter style={{ width: "4rem" }}>{cards.filter(card => card.status === "completed").length}</KanbanCounter>
+            Completed
+            <KanbanCounter style={{ width: "4rem" }}>
+              {cards.filter((card) => card.status === "completed").length}
+            </KanbanCounter>
           </MobileKanbanHeader>
-          <MobileKanbanContent
-            $isShowing={showComplete ? 1 : 0}
-          >
-             {cards.filter(card => card.status === "completed").map((card, index) => <CardKanBan key={index} {...card} />)}
+          <MobileKanbanContent $isShowing={showComplete}>
+            {cards
+              .filter((card) => card.status === "completed")
+              .map((card, index) => (
+                <CardKanBan key={index} {...card} />
+              ))}
           </MobileKanbanContent>
         </MobileKanbanStatusContainer>
       </MobileKanbanContainer>

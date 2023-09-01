@@ -159,7 +159,7 @@ export const CardTaskDescriptionImg = styled.img`
   border-radius: 10px;
 `;
 
-export const CardTaskBody = styled.div<{$haveImg:number}>`
+export const CardTaskBody = styled.div<{ $haveImg: boolean }>`
   padding: 10px;
   box-sizing: border-box;
   height: auto;
@@ -167,12 +167,22 @@ export const CardTaskBody = styled.div<{$haveImg:number}>`
   //2col
   display: grid;
   grid-template-columns: 60% 40%;
-  ${({$haveImg})=> $haveImg ? css``:css`grid-template-columns:1fr;`}
+  ${({ $haveImg }) =>
+    $haveImg
+      ? css``
+      : css`
+          grid-template-columns: 1fr;
+        `}
   //background-color: aqua;
   @media screen and (width < 1100px) {
     grid-template-columns: unset;
     grid-template-rows: 120px auto;
-     ${({$haveImg})=> $haveImg ? css``:css`grid-template-rows:120px;`}
+    ${({ $haveImg }) =>
+      $haveImg
+        ? css``
+        : css`
+            grid-template-rows: 120px;
+          `}
     gap: 10px;
   }
   @media screen and (width < 820px) {
@@ -183,7 +193,7 @@ export const CardTaskBody = styled.div<{$haveImg:number}>`
 `;
 
 export const CardTaskFooter = styled.div`
-margin-top: 10px;
+  margin-top: 10px;
   padding: 10px;
   display: inline-block;
   flex-direction: column;
@@ -207,7 +217,7 @@ export const MobileKanbanContainer = styled.div`
   }
 `;
 
-export const MobileKanbanHeader = styled.div<{  $status: string }>`
+export const MobileKanbanHeader = styled.div<{ $status: string }>`
   height: 3rem;
   color: white;
   padding: 10px;
@@ -221,8 +231,8 @@ export const MobileKanbanHeader = styled.div<{  $status: string }>`
   flex-direction: column;
   text-align: center;
 
-  ${({  $status }) => {
-    switch ( $status) {
+  ${({ $status }) => {
+    switch ($status) {
       case "pending":
         return css`
           background-color: orange;
@@ -243,7 +253,7 @@ export const MobileKanbanHeader = styled.div<{  $status: string }>`
   }}
 `;
 
-export const MobileKanbanContent = styled.div<{ $isShowing: number }>`
+export const MobileKanbanContent = styled.div<{ $isShowing: boolean }>`
   height: auto;
   overflow: hidden;
   box-sizing: border-box;
@@ -253,7 +263,7 @@ export const MobileKanbanContent = styled.div<{ $isShowing: number }>`
   flex-direction: column;
   gap: 10px;
   transition: all 0.5s ease-in-out;
-  display: ${({  $isShowing }) => ( $isShowing ? "flex" : "none")};
+  display: ${({ $isShowing }) => ($isShowing ? "flex" : "none")};
 `;
 
 export const MobileKanbanStatusContainer = styled.div<{ $status: string }>`
@@ -268,8 +278,8 @@ export const MobileKanbanStatusContainer = styled.div<{ $status: string }>`
   text-align: center;
   gap: 10px;
 
-  ${({  $status }) => {
-    switch ( $status) {
+  ${({ $status }) => {
+    switch ($status) {
       case "pending":
         return css`
           border: 1px solid orange;

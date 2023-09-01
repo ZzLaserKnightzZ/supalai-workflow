@@ -126,9 +126,19 @@ export const ProjectPage: React.FC = () => {
           ViewDetail,
         }}
       >
-        {pageType === "flow" ? <FlowPage /> : null}
-        {pageType === "timeline" ? <GanttPage /> : null}
-        {pageType === "kanban" ? <KanbanPage /> : null}
+        <div
+          style={{ width: "calc(100vw - 2rem)", height: "calc(100vh - 3rem)" }}
+        >
+          {pageType === "flow" ? (
+            <FlowPage tasks={project?.project.task} />
+          ) : null}
+          {pageType === "timeline" ? (
+            <GanttPage tasks={project?.project.task} />
+          ) : null}
+          {pageType === "kanban" ? (
+            <KanbanPage tasks={project?.project.task} />
+          ) : null}
+        </div>
       </TaskContext.Provider>
       {/*popup detail*/}
       <DetailContainer $isShowing={isShowingDetail}>

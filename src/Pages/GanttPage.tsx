@@ -5,8 +5,11 @@ import { getStartEndDateForProject, initTasks } from "../helper";
 import "../styled/Gantt/GanttPage.css";
 import { Project, ProjectTask } from "../model/ProjectTask";
 import test from "../Data/test.json";
+import { useContext } from "react";
+import { TaskContext } from "./ProjectPage";
 
-let day = 2,order=0;
+let day = 2,
+  order = 0;
 
 const ConvertJsonToGantt = (
   tasks: ProjectTask[],
@@ -27,22 +30,22 @@ const ConvertJsonToGantt = (
   };
 */
 
-saveTasks(
-  tasks.map((task, index) => {
-    order++;
-    return {
-      start: new Date(2021, 1, day-1),
-      end: new Date(2021, 1, day++),
-      name: task.name+task.id,
-      id: task.id.toString(),
-      progress: 25,
-      dependencies: [dependencies],
-      type: "task",
-      project: "project name",
-      displayOrder: order,
-    };
-  })
-);
+  saveTasks(
+    tasks.map((task, index) => {
+      order++;
+      return {
+        start: new Date(2021, 1, day - 1),
+        end: new Date(2021, 1, day++),
+        name: task.name + task.id,
+        id: task.id.toString(),
+        progress: 25,
+        dependencies: [dependencies],
+        type: "task",
+        project: "project name",
+        displayOrder: order,
+      };
+    })
+  );
 
   for (const task of tasks) {
     if (task.task) {
@@ -61,12 +64,15 @@ ConvertJsonToGantt(
   "project"
 );
 //console.log(taskss);
-interface GanttPageProps {}
+interface GanttPageProps {
+  tasks?: ProjectTask[];
+}
 
 export const GanttPage: React.FC<GanttPageProps> = (props) => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
   const [tasks, setTasks] = React.useState<Task[]>(taskss);
   const [isChecked, setIsChecked] = React.useState(true);
+  const { ViewDetail } = useContext(TaskContext);
   let columnWidth = 65;
   if (view === ViewMode.Year) {
     columnWidth = 350;
@@ -115,6 +121,7 @@ export const GanttPage: React.FC<GanttPageProps> = (props) => {
 
   const handleClick = (task: Task) => {
     console.log("On Click event Id:" + task.id);
+    ViewDetail(task.id);
   };
 
   const handleSelect = (task: Task, isSelected: boolean) => {
