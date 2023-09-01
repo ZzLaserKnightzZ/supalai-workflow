@@ -44,7 +44,7 @@ export const ProjectPage: React.FC = () => {
 */
 
   const [pageType, setPageType] = React.useState("flow");
-  const [project, setProject] = React.useState<{ project: Project } | null>(
+  const [project, setProject] = React.useState< Project  | null>(
     null
   );
   const [detailId, setDetailId] = React.useState("");
@@ -70,7 +70,7 @@ export const ProjectPage: React.FC = () => {
         <BannerProjectName>
           <Color></Color>
           <SelectProjectName>
-            <div> {project?.project.name}</div>
+            <div> {project?.name}</div>
             <div>
               <FaChevronDown />
             </div>
@@ -117,7 +117,7 @@ export const ProjectPage: React.FC = () => {
         {/*right*/}
         <DateTime>
           Due Date : <BsCalendar3 /> &nbsp; 2021/12/12{" "}
-          {project?.project.dueDate}
+          {project?.dueDate}
         </DateTime>
       </BannerProjectContaner>
       {/*<Outlet />*/}
@@ -130,14 +130,14 @@ export const ProjectPage: React.FC = () => {
           style={{ width: "calc(100vw - 2rem)", height: "calc(100vh - 3rem)" }}
         >
           {pageType === "flow" ? (
-            <FlowPage tasks={project?.project.task} />
-          ) : null}
+            <FlowPage tasks={project?.task} />
+          ) : <></>}
           {pageType === "timeline" ? (
-            <GanttPage tasks={project?.project.task} />
-          ) : null}
+            <GanttPage tasks={project?.task} />
+          ) : <></>}
           {pageType === "kanban" ? (
-            <KanbanPage tasks={project?.project.task} />
-          ) : null}
+            <KanbanPage tasks={project?.task} />
+          ) : <></>}
         </div>
       </TaskContext.Provider>
       {/*popup detail*/}
