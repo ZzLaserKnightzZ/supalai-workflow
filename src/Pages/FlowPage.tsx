@@ -22,7 +22,6 @@ import CustomEdge from "../components/Flow/CustomEdge";
 import projectData from "../Data/project.json";
 import test from "../Data/test.json";
 import { Project, ProjectTask } from "../model/ProjectTask";
-import { ConverToNodeFlow, ConvertToEdge } from "../functionConverter/Convert";
 
 /*
 const initialNodes: Node[] = [
@@ -75,7 +74,12 @@ const DrawProject = (
         x: x,
         y: y,
       },
-      data: { label: task.id + ":" + x + "," + y, parentId: task.parentId },
+      data: {
+        label: task.name,
+        description: task.description,
+        parentId: task.parentId,
+        status: task.status,
+      },
       type: "customNode",
     } as Node);
 
@@ -86,7 +90,46 @@ const DrawProject = (
   }
 };
 
-const SortNodes2 = (
+const ConvertToEdge = (
+  tasks: ProjectTask[],
+  addEdg: (edgs: Edge[]) => void
+) => {
+  addEdg(
+    tasks.map((task: ProjectTask, index: number) => {
+      return {
+        id: task.id + "",
+        source: task.parentId + "",
+        target: task.id + "",
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          width: 6,
+          height: 6,
+          color: "white",
+          strokeWidth: 4,
+        },
+        animated: false,
+        style: {
+          strokeWidth: 3,
+          stroke: "white",
+        },
+        data: {
+          label: task.startDate+": "+ task.progress + "%",
+          status: task.status,
+          //percent: task.percent,
+        },
+        type: "custom",
+      } as Edge;
+    })
+  );
+
+  for (let task of tasks) {
+    if (task.task) {
+      ConvertToEdge(task.task, addEdg);
+    }
+  }
+};
+
+const SortNodes = (
   nodes: Node[],
   saveNode: (node: Node) => void,
   startX = 0,
@@ -116,7 +159,7 @@ const SortNodes2 = (
             index++;
           }
         });
-      SortNodes2(nodes, saveNode, xMax - stepX, y, ++step);
+      SortNodes(nodes, saveNode, xMax - stepX, y, ++step);
     });
   } else {
     const nodesColumn = nodes.filter((node) => node.position.x === startX);
@@ -144,40 +187,49 @@ const SortNodes2 = (
     });
 
     if (startX > stepX) {
-      SortNodes2(nodes, saveNode, startX - stepX, y, ++step);
+      SortNodes(nodes, saveNode, startX - stepX, y, ++step);
     }
   }
 };
+
 //------------------------------node---------------------------------
+/*
 const project = JSON.parse(JSON.stringify(test)) as Project; //const project = JSON.parse(JSON.stringify(projectData)) as Project;
 let nodeArr: Node[] = [];
-
+*/
 //////////////////////////////test////////////////////////////////////
 //const projectTest = JSON.parse(JSON.stringify(projectTest)) as Project;
-
+/*
 if (project.task)
   DrawProject(project.task, (node) => {
     nodeArr = [...nodeArr, node];
   });
 for (let sortTime = 0; sortTime < 30; sortTime++) {
-  SortNodes2(nodeArr, (node) => {
+  SortNodes(nodeArr, (node) => {
     nodeArr = nodeArr.map((n) => (n.id === node.id ? node : n));
   });
 }
 const initialNodes: Node[] = nodeArr;
 //////////////////////////////test////////////////////////////////////
 //------------------------------node--------------------------------
+*/
 
-//------------------------------edge--------------------------------
+//------------------------------test edge--------------------------------
+/*
 let initialEdges: Edge[] = [];
 ConvertToEdge(project.task, (edg) => {
   initialEdges = [...initialEdges, ...edg];
 });
+*/
 //console.log(initialEdges);
 const nodeTypes = {
   customNode: CustomNode,
 };
-//------------------------------edge--------------------------------
+//------------------------------test edge--------------------------------
+
+
+
+
 /*
 const initialEdges: Edge[] = [
   {
@@ -255,9 +307,12 @@ interface IFlowPageProps {
 }
 
 export const FlowPage: React.FC<IFlowPageProps> = (props) => {
+  /*
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
+  */
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   /**
      *   const onNodesChange: OnNodesChange = useCallback(
             (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -274,6 +329,29 @@ export const FlowPage: React.FC<IFlowPageProps> = (props) => {
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );*/
+
+  const initTask = () => {
+    if (props.tasks) {
+      let initNodes: Node[] = [];
+      DrawProject(props.tasks, (node) => {
+        initNodes = [...initNodes, node];
+      });
+
+        for (let sortTime = 0; sortTime < 30; sortTime++) {
+          SortNodes(initNodes , (node) => {
+            initNodes = initNodes.map(prev => prev.id === node.id ? node : prev);
+          });
+        }
+        setNodes(initNodes);
+      ConvertToEdge(props.tasks, (edg) => {
+        setEdges((prev) => [...prev, ...edg]);
+      });
+
+
+    }
+  };
+
+  React.useEffect(initTask, [props.tasks]);
 
   return (
     <>

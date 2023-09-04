@@ -26,6 +26,7 @@ import {
   DetailContent,
   DetailTitle,
 } from "../styled/BannerProject/Detail.styled";
+import test from "../Data/test.json";
 
 export interface TaskManager {
   ViewDetail: (id: string) => void;
@@ -34,6 +35,9 @@ export interface TaskManager {
 export const TaskContext = React.createContext<TaskManager>({
   ViewDetail: (id) => {},
 });
+
+const testProject = JSON.parse(JSON.stringify(test)) as Project;
+
 
 export const ProjectPage: React.FC = () => {
   /*
@@ -47,21 +51,23 @@ export const ProjectPage: React.FC = () => {
   const [project, setProject] = React.useState< Project  | null>(
     null
   );
-  const [detailId, setDetailId] = React.useState("");
   const [isShowingDetail, setIsShowingDetail] = React.useState(false);
 
-  const fetchData = () => {};
-
-  const ViewDetail = (id: string) => {
-    //console.log(id);
-    setDetailId(id);
+  const fetchData = () => {
+    /*
+    fetch("http://localhost:3000/project/1").then((res) => res.json()).then((data) => {
+      setProject(data);
+    });
+    */
+    setProject(testProject);
   };
 
-  React.useEffect(() => {
+  const ViewDetail = (id: string) => {
+    console.log("view detail",id);
     setIsShowingDetail(true);
-    //nodes.forEach((node) => {console.log(node)});
-  }, [detailId]);
-  React.useEffect(fetchData);
+  };
+
+  React.useEffect(fetchData,[]);
 
   return (
     <>
@@ -116,7 +122,7 @@ export const ProjectPage: React.FC = () => {
         </BannerProjectName>
         {/*right*/}
         <DateTime>
-          Due Date : <BsCalendar3 /> &nbsp; 2021/12/12{" "}
+          Due Date : <BsCalendar3 /> &nbsp; 2021/12/12
           {project?.dueDate}
         </DateTime>
       </BannerProjectContaner>
@@ -144,7 +150,7 @@ export const ProjectPage: React.FC = () => {
       <DetailContainer $isShowing={isShowingDetail}>
         <DetailBox>
           <DetailTitle>
-            <label>hello</label>{" "}
+            <label>hello</label>
             <CancleBtn onClick={() => setIsShowingDetail(false)}>
               &times;
             </CancleBtn>

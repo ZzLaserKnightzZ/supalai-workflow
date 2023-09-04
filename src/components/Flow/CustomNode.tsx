@@ -26,14 +26,18 @@ const CustomNode = ({
 
   return (
     <>
-      <NodeContainer $state={data?.label} $isFullSize={isFullSize ? 1:0}>
+      <NodeContainer $status={data?.status} $isFullSize={isFullSize}>
         <LockBtn onClick={() => setIsFullSize((x) => !x)}>
           {isFullSize ? <AiOutlineLock /> : <AiOutlineUnlock />}
         </LockBtn>
         <ViewDetailBtn onClick={() => ViewDetail(data?.label)}>
           <AiOutlineRead />
         </ViewDetailBtn>
-        <CopyBtn>
+        <CopyBtn
+          onClick={() =>
+            navigator.clipboard.writeText(data?.label + ":" + data?.description)
+          }
+        >
           <AiOutlineCopy />
         </CopyBtn>
         <Handle
@@ -41,18 +45,19 @@ const CustomNode = ({
           //position={targetPosition}
           position={Position.Left}
           isConnectable={isConnectable}
-          style={{border:"1px solid lime",backgroundColor:"lime"}}
+          style={{ border: "1px solid lime", backgroundColor: "lime" }}
         />
         <TextContainer>
-          {data?.label}{" "}
-          ddddddddddddddddddddddddddddddddffffffaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadddddddddddffffffaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadddddddddddffffffaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadddddddddddffffffaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadddddddddddffffffaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          {" "}
+          <b>{data?.label}</b> <br />
+          {data?.description}
         </TextContainer>
         <Handle
           type="source"
           //position={sourcePosition}
           position={Position.Right}
           isConnectable={isConnectable}
-          style={{border:"1px solid lime",backgroundColor:"lime"}}
+          style={{ border: "1px solid lime", backgroundColor: "lime" }}
         />
       </NodeContainer>
     </>

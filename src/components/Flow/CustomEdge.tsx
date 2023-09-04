@@ -32,10 +32,10 @@ const CustomEdge: FC<EdgeProps> = ({
   const [isHover, setIsHover] = React.useState(false);
   return (
     <>
-      <BaseEdge id={id} path={edgePath}  markerEnd={markerEnd} style={style} />
+      <BaseEdge id={id} path={edgePath} markerEnd={markerEnd} style={style} />
       <EdgeLabelRenderer>
         <EdgeBox
-          $status="1"
+          $status={data?.status}
           style={{
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
             pointerEvents:

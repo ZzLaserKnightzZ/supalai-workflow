@@ -28,7 +28,7 @@ const ConvertJsonToKanban = (
         id: task.id + "",
         name: task.name + task.id,
         description: task.description,
-        date: task?.date,
+        startDate: task?.startDate,
         faculty: task.faculty,
         img: task.img,
         status: task.status,
@@ -44,23 +44,35 @@ const ConvertJsonToKanban = (
   }
 };
 
+/*
 let card_list: ICardKanban[] = [];
 const testProject = JSON.parse(JSON.stringify(jsonTest)) as Project;
 ConvertJsonToKanban(testProject.task, (newCards) => {
   card_list = [...card_list, ...newCards];
 });
-
+*/
 export const KanbanPage: React.FC<IKanbanPageProps> = (props) => {
-  const [cards, setCards] = React.useState<ICardKanban[]>(card_list);
+  const [cards, setCards] = React.useState<ICardKanban[]>([]);
   const [showPending, setShowPending] = React.useState<boolean>(false);
   const [showShedule, setShowShedule] = React.useState<boolean>(false);
   const [showStuck, setShowStuck] = React.useState<boolean>(false);
   const [showComplete, setShowComplete] = React.useState<boolean>(false);
+
+  const initTask = () => {
+    if (props.tasks) {
+      ConvertJsonToKanban(props.tasks, (newCards) => {
+        setCards((prev) => [...prev, ...newCards]);
+      });
+    }
+  };
+
+  React.useEffect(initTask, []);
+
   return (
     <>
       <KanbanContainer>
         <KanbanColumn $status="pending">
-          Pending{" "}
+          Pending
           <KanbanCounter>
             {cards.filter((card) => card.status === "pending").length}
           </KanbanCounter>

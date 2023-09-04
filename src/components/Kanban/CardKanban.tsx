@@ -22,7 +22,7 @@ export interface ICardKanban {
     name?: string;
     img?: string[];
     description?: string;
-    date?: string;
+    startDate?: string;
     file?: string[];
     status?: string;
     faculty?: string;
@@ -52,7 +52,7 @@ export const CardKanBan: React.FC<ICardKanban> = (prop) => {
         </CardTaskBody>
         <CardTaskFooter>
          
-          &nbsp; {prop?.date &&  <BsCalendarWeek />} {prop?.date } <AiOutlinePaperClip /> <BsClipboardMinus />
+          &nbsp; {prop?.startDate &&  <BsCalendarWeek />} {prop?.startDate } <AiOutlinePaperClip /> <BsClipboardMinus />
         </CardTaskFooter>
       </CardTask>
     );

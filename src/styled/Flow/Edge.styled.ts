@@ -8,7 +8,7 @@ export const EdgeBox = styled.div<{
   height: 30px;
   box-sizing: border-box;
   transition: all 0.3s linear;
-  //padding: 10px;
+  overflow: hidden;
   font-size: 12px;
   //center icon
   display: flex;
@@ -21,21 +21,30 @@ export const EdgeBox = styled.div<{
 
   ${({ $status }) => {
     switch ($status) {
-      case "1":
+      case "stuck":
         return css`
+          //color: red;
+          background-color: red;
+        `;
+      case "on shedule":
+        return css`
+          //color: pink;
+          background-color: aqua;
+        `;
+      case "completed":
+        return css`
+          //color: lime;
           background-color: lime;
         `;
-      case "2":
+      case "pending":
         return css`
-          background-color: yellow;
-        `;
-      case "3":
-        return css`
-          background-color: red;
+          //color: gold;
+          background-color: orange;
         `;
       default:
         return css`
-          background-color: white;
+          //color: white;
+          background-color: gray;
         `;
     }
   }}

@@ -11,13 +11,13 @@ const App = () => {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/:projectId" element={<ProjectPage />}>
+            <Route path="/:projectId" index element={<ProjectPage />}/>
             {/*
             <Route index element={<GanttPage />} />
             <Route path="flow" element={<FlowPage />} />
             <Route path="kanban" element={<KanbanPage />} />
             */}
-          </Route>
+         {/* </Route>*/}
         </Routes>
       </BrowserRouter>
     </>

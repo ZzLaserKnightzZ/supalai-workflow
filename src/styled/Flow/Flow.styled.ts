@@ -1,3 +1,4 @@
+import { Background } from "reactflow";
 import styled, { css } from "styled-components";
 
 export const ViewDetailBtn = styled.div`
@@ -38,6 +39,7 @@ export const TextContainer = styled.div`
   padding: 5px;
   font-size: 1.3rem;
   max-height: calc(300px - 30px);
+  min-height: calc(60px - 5px);
   background-color: rgba(0, 0, 0, 1) !important;
   word-wrap: break-word;
   overflow-y: auto;
@@ -48,40 +50,44 @@ export const TextContainer = styled.div`
 `;
 
 export const NodeContainer = styled.div<{
-  $state: string;
-  $isFullSize: number;
+  $status: string;
+  $isFullSize: boolean;
 }>`
   //view detail btn
   position: relative;
   transition: all 0.7s linear;
-  //border: 1px solid gold;
   width: 220px;
   height: 60px;
   max-height: 300px;
   padding: 3px;
   border-radius: 5px;
   box-sizing: border-box;
-  ${({ $state }) => {
-    switch ($state) {
-      case "1":
+  ${({ $status }) => {
+    switch ($status) {
+      case "stuck":
         return css`
-          color: red;
+          //color: red;
           background-color: red;
         `;
-      case "2":
+      case "on shedule":
         return css`
-          color: pink;
-          background-color: pink;
+          //color: pink;
+          background-color: aqua;
         `;
-      case "3":
+      case "completed":
         return css`
-          color: lime;
+          //color: lime;
           background-color: lime;
         `;
-      case "4":
+      case "pending":
         return css`
-          color: gold;
-          background-color: gold;
+          //color: gold;
+          background-color: orange;
+        `;
+      default:
+        return css`
+          //color: white;
+          background-color: gray;
         `;
     }
   }}

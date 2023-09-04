@@ -8,7 +8,7 @@ import test from "../Data/test.json";
 import { useContext } from "react";
 import { TaskContext } from "./ProjectPage";
 
-let day = 2,
+var day = 2,
   order = 0;
 
 const ConvertJsonToGantt = (
@@ -34,11 +34,13 @@ const ConvertJsonToGantt = (
     tasks.map((task, index) => {
       order++;
       return {
-        start: new Date(2021, 1, day - 1),
-        end: new Date(2021, 1, day++),
+        //start: new Date(2021, 1, day - 1),
+        //end: new Date(2021, 1, day++),
+        start: task.startDate ? new Date(task.startDate):new Date(),
+        end: task.endDate ? new Date( task.endDate):new Date(),
         name: task.name + task.id,
         id: task.id.toString(),
-        progress: 25,
+        progress: task.progress ? task.progress : 0,
         dependencies: [dependencies],
         type: "task",
         project: "project name",
@@ -53,7 +55,8 @@ const ConvertJsonToGantt = (
     }
   }
 };
-
+/*
+//----------------------test---------------------------
 const testProject = JSON.parse(JSON.stringify(test)) as Project;
 let taskss: Task[] = [];
 ConvertJsonToGantt(
@@ -63,16 +66,19 @@ ConvertJsonToGantt(
   },
   "project"
 );
-//console.log(taskss);
+//----------------------test---------------------------
+*/
+
 interface GanttPageProps {
   tasks?: ProjectTask[];
 }
 
 export const GanttPage: React.FC<GanttPageProps> = (props) => {
   const [view, setView] = React.useState<ViewMode>(ViewMode.Day);
-  const [tasks, setTasks] = React.useState<Task[]>(taskss);
+  const [tasks, setTasks] = React.useState<Task[]>([]);
   const [isChecked, setIsChecked] = React.useState(true);
   const { ViewDetail } = useContext(TaskContext);
+
   let columnWidth = 65;
   if (view === ViewMode.Year) {
     columnWidth = 350;
@@ -112,26 +118,41 @@ export const GanttPage: React.FC<GanttPageProps> = (props) => {
 
   const handleProgressChange = async (task: Task) => {
     setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
-    console.log("On progress change Id:" + task.id);
+    //console.log("On progress change Id:" + task.id);
   };
 
   const handleDblClick = (task: Task) => {
-    alert("On Double Click event Id:" + task.id);
+    //alert("On Double Click event Id:" + task.id);
   };
 
   const handleClick = (task: Task) => {
-    console.log("On Click event Id:" + task.id);
+    //console.log("On Click event Id:" + task.id);
     ViewDetail(task.id);
   };
 
   const handleSelect = (task: Task, isSelected: boolean) => {
-    console.log(task.name + " has " + (isSelected ? "selected" : "unselected"));
+    //console.log(task.name + " has " + (isSelected ? "selected" : "unselected"));
   };
 
   const handleExpanderClick = (task: Task) => {
     setTasks(tasks.map((t) => (t.id === task.id ? task : t)));
-    console.log("On expander click Id:" + task.id);
+    //console.log("On expander click Id:" + task.id);
   };
+
+  const initTask = () => {
+    //console.log("init",props.tasks);
+    if (props.tasks) {
+      ConvertJsonToGantt(
+        props.tasks,
+        (newTasks) => {
+          setTasks((prev) => [...prev, ...newTasks]);
+        },
+        "project"
+      );
+    }
+  };
+
+  React.useEffect(initTask, []);
 
   return (
     <div className="Wrapper">
@@ -140,7 +161,7 @@ export const GanttPage: React.FC<GanttPageProps> = (props) => {
         onViewListChange={setIsChecked}
         isChecked={isChecked}
       />
-      <Gantt
+      {tasks.length > 0 ? <Gantt
         tasks={tasks}
         viewMode={view}
         onDateChange={handleTaskChange}
@@ -152,7 +173,7 @@ export const GanttPage: React.FC<GanttPageProps> = (props) => {
         onExpanderClick={handleExpanderClick}
         listCellWidth={isChecked ? "155px" : ""}
         columnWidth={columnWidth}
-      />
+      />:<h1>ไม่มีข่อมูล</h1>}
     </div>
   );
 };

@@ -5,7 +5,8 @@ export interface ProjectTask {
   sequence: number;
   name: string;
   description: string;
-  date?: string;
+  startDate?: string;
+  endDate?: string;
   user: string;
   status: string;
   members: string;
@@ -13,7 +14,9 @@ export interface ProjectTask {
   img?: string[];
   attached: string;
   userImage?: string;
-  task?: ProjectTask[] ;
+  progress:number,
+  task?: ProjectTask[];
+  
 }
 
 export interface Project {
