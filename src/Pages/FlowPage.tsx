@@ -19,7 +19,6 @@ import CustomNode from "../components/Flow/CustomNode";
 import CustomEdge from "../components/Flow/CustomEdge";
 
 //test
-import projectData from "../Data/project.json";
 import test from "../Data/test.json";
 import { Project, ProjectTask } from "../model/ProjectTask";
 

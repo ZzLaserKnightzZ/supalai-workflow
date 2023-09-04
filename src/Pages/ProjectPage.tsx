@@ -55,7 +55,7 @@ export const ProjectPage: React.FC = () => {
 
   const fetchData = () => {
     /*
-    fetch("http://localhost:3000/project/1").then((res) => res.json()).then((data) => {
+    fetch("http://localhost:3000/project?id="+projectId).then((res) => res.json()).then((data) => {
       setProject(data);
     });
     */
