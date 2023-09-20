@@ -48,8 +48,8 @@ const CustomNode = ({
           style={{ border: "1px solid lime", backgroundColor: "lime" }}
         />
         <TextContainer>
-          {" "}
-          <b>{data?.label}</b> <br />
+          <b>{data?.label}</b> 
+          <br />
           {data?.description}
         </TextContainer>
         <Handle

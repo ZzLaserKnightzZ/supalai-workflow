@@ -8,13 +8,11 @@ import test from "../Data/test.json";
 import { useContext } from "react";
 import { TaskContext } from "./ProjectPage";
 
-var day = 2,
-  order = 0;
 
 const ConvertJsonToGantt = (
   tasks: ProjectTask[],
   saveTasks: (tasks: Task[]) => void,
-  dependencies: string
+  dependencies: string,
 ) => {
   /*
   //add project
@@ -32,7 +30,6 @@ const ConvertJsonToGantt = (
 
   saveTasks(
     tasks.map((task, index) => {
-      order++;
       return {
         //start: new Date(2021, 1, day - 1),
         //end: new Date(2021, 1, day++),
@@ -44,7 +41,7 @@ const ConvertJsonToGantt = (
         dependencies: [dependencies],
         type: "task",
         project: "project name",
-        displayOrder: order,
+        displayOrder: 0, //init
       };
     })
   );
@@ -54,6 +51,7 @@ const ConvertJsonToGantt = (
       ConvertJsonToGantt(task.task, saveTasks, task.id.toString());
     }
   }
+
 };
 /*
 //----------------------test---------------------------
@@ -142,13 +140,17 @@ export const GanttPage: React.FC<GanttPageProps> = (props) => {
   const initTask = () => {
     //console.log("init",props.tasks);
     if (props.tasks) {
+      let taskss: Task[] = [];
       ConvertJsonToGantt(
         props.tasks,
         (newTasks) => {
-          setTasks((prev) => [...prev, ...newTasks]);
-        },
-        "project"
-      );
+          taskss = [...taskss,...newTasks];
+        },"project");
+      console.log(tasks);
+       taskss.sort((a, b) => Number(a.id) - Number(b.id)).forEach((t, i) => {
+        t.displayOrder = i+1;
+      });
+      setTasks(taskss);
     }
   };
 
