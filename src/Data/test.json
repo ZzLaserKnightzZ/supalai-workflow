@@ -196,7 +196,25 @@
                             "progress":50,
                             "img":["https://picsum.photos/200/300"],
                             "userImage":"https://picsum.photos/200/300",
-                            "task": []
+                            "task": [
+                                {
+                                    "id": 77,
+                                    "projectId": 1,
+                                    "parentId": 7,
+                                    "sequence": 2,
+                                    "name": "Task",
+                                    "description": "Task1 description",
+                                    "startDate": "2023-08-11",
+                                    "endDate":"2023-08-12",
+                                    "user": "1",
+                                    "status": "stuck",
+                                    "members": "2",
+                                    "attached": "3",
+                                    "progress":50,
+                                    "img":["https://picsum.photos/200/300"],
+                                    "userImage":"https://picsum.photos/200/300"
+                                }
+                            ]
                         }
                     ]
                 },

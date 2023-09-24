@@ -21,6 +21,7 @@ import CustomEdge from "../components/Flow/CustomEdge";
 //test
 import test from "../Data/test.json";
 import { Project, ProjectTask } from "../model/ProjectTask";
+import { ConverToNodeFlow } from "../functionConverter/Convert";
 
 /*
 const initialNodes: Node[] = [
@@ -191,6 +192,73 @@ const SortNodes = (
   }
 };
 
+//------------------------------node convertter 2 ---------------------------------
+const ConvertToNode2 = (  tasks: ProjectTask[],
+  addTask: (nodes: Node[]) => void,
+  startX = 0,
+  startY = 0,
+  isFirst = true)=>{
+
+    const stepX = 300, stepY = 300;
+    if(isFirst){
+      addTask([{
+        id: 0 + "",
+        position: {
+          x: -300,
+          y: 300,
+        },
+        data: {
+          label: "start",
+          description: "start",
+          parentId: "",
+          status: "completed",
+        },
+        type: "customNode",
+      } as Node]);
+    }
+
+    let y=0;
+    addTask(tasks.map((task: ProjectTask, index: number) => {
+      y += stepY;
+      return {
+        id: task.id + "",
+        position: {
+          x: startX ,
+          y: y,
+        },
+        data: {
+          label: task.name+"id="+task.id+":"+startX+":"+y,
+          description: task.description,
+          parentId: task.parentId,
+          status: task.status,
+        },
+        type: "customNode",
+      } as Node;
+    }));
+
+    for (let task of tasks) {
+      
+      if (task.task) {
+        ConvertToNode2(task.task, addTask, startX + stepX,y, false);
+      }
+    }
+
+}
+
+const SordNodes2 = (nodes: Node[],startX=300,saveChange:(node:Node)=>void)=>{
+ let nodeCols=  nodes.filter(node=>node.position.x===startX);
+ 
+ nodeCols.forEach((node,index)=>{
+    saveChange({
+      ...node,
+      position: { x: node.position.x, y: index*300 },
+    } as Node);
+  });
+
+  if(nodeCols.length>0)
+  SordNodes2(nodes,startX+300,saveChange);
+}
+//------------------------------node convertter 2 ---------------------------------
 //------------------------------node---------------------------------
 /*
 const project = JSON.parse(JSON.stringify(test)) as Project; //const project = JSON.parse(JSON.stringify(projectData)) as Project;
@@ -213,13 +281,32 @@ const initialNodes: Node[] = nodeArr;
 //------------------------------node--------------------------------
 */
 
-//------------------------------test edge--------------------------------
+//-------------------------------test node ---------------------------
+const projectTest = JSON.parse(JSON.stringify(test)) as Project;
 /*
+let nodeArr: Node[] = [];
+ConverToNodeFlow(nodeArr, projectTest.task,(nodes)=> {
+  nodeArr = [...nodeArr, ...nodes];
+});
+const initialNodes: Node[] = nodeArr;
+*/
+let nodeArr: Node[] = [];
+ConvertToNode2( projectTest.task,(nodes)=> {
+  nodeArr = [...nodeArr, ...nodes];
+});
+SordNodes2(nodeArr,-300,(node)=> {
+  nodeArr = nodeArr.map(prev => prev.id === node.id ? node : prev);
+});
+const initialNodes: Node[] = nodeArr;
+console.log(initialNodes);
+//-------------------------------test node ---------------------------
+//------------------------------test edge--------------------------------
+
 let initialEdges: Edge[] = [];
-ConvertToEdge(project.task, (edg) => {
+ConvertToEdge(projectTest.task, (edg) => {
   initialEdges = [...initialEdges, ...edg];
 });
-*/
+
 //console.log(initialEdges);
 const nodeTypes = {
   customNode: CustomNode,
@@ -306,12 +393,14 @@ interface IFlowPageProps {
 }
 
 export const FlowPage: React.FC<IFlowPageProps> = (props) => {
-  /*
+  
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  */
+  
+ /*
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+*/
   /**
      *   const onNodesChange: OnNodesChange = useCallback(
             (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -350,7 +439,7 @@ export const FlowPage: React.FC<IFlowPageProps> = (props) => {
     }
   };
 
-  React.useEffect(initTask, [props.tasks]);
+ // React.useEffect(initTask, [props.tasks]);
 
   return (
     <>
